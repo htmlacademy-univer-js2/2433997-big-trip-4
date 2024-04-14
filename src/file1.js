@@ -1,0 +1,1 @@
+document.querySelector('file1');
