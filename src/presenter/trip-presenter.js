@@ -1,24 +1,32 @@
+import PointView from '../view/point-view.js';
+import PointsListView from '../view/points-list-view.js';
+import EditPointView from '../view/edit-point-view.js';
 import SortView from '../view/sort-view.js';
-import EditPoint from '../view/edit-point-view.js';
-import EventList from '../view/event-list-view.js';
-import EventPoint from '../view/event-point-view.js';
 import { render } from '../render.js';
-import { POINT_COUNT } from '../const.js';
 
 export default class TripPresenter {
-  eventListComponent = new EventList();
+  pointsListComponent = new PointsListView();
 
-  constructor({ tripContainer }) {
+  constructor({ tripContainer, pointsModel }) {
     this.tripContainer = tripContainer;
+    this.pointsModel = pointsModel;
   }
 
   init() {
-    render(new SortView(), this.tripContainer);
-    render(this.eventListComponent, this.tripContainer);
-    render(new EditPoint(), this.eventListComponent.getElement());
+    this.tripPoints = [...this.pointsModel.getPoints()];
 
-    for (let i = 0; i < POINT_COUNT; i++) {
-      render(new EventPoint(), this.eventListComponent.getElement());
+    render(new SortView(), this.tripContainer);
+    render(this.pointsListComponent, this.tripContainer);
+    render(
+      new EditPointView({ point: this.tripPoints[0] }),
+      this.pointsListComponent.getElement()
+    );
+
+    for (let i = 1; i < this.tripPoints.length; i++) {
+      render(
+        new PointView({ point: this.tripPoints[i] }),
+        this.pointsListComponent.getElement()
+      );
     }
   }
 }

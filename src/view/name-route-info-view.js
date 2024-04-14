@@ -1,9 +1,9 @@
+import { createNameRouteInfoTemplate } from '../template/name-route-info-template';
 import { createElement } from '../render.js';
-import { createEventPointTemplate } from '../template/event-point-template.js';
 
-export default class RoutePoint {
+export default class NameRouteInfoView {
   getTemplate() {
-    return createEventPointTemplate();
+    return createNameRouteInfoTemplate();
   }
 
   getElement() {
