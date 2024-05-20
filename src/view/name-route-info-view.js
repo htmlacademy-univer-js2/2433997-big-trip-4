@@ -1,20 +1,8 @@
 import { createNameRouteInfoTemplate } from '../template/name-route-info-template';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class NameRouteInfoView {
-  getTemplate() {
+export default class NameRouteInfoView extends AbstractView {
+  get template() {
     return createNameRouteInfoTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
