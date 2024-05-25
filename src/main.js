@@ -30,6 +30,3 @@ render(new NameRouteInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 
 tripPresenter.init();
 filterPresenter.init();
-
-///
-///
