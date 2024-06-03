@@ -1,44 +1,28 @@
-const DESTINATION_COUNT = 5;
-const OFFER_COUNT = 6;
-const POINT_COUNT = 10;
-
-const FILTER_TYPES = {
-  EVERYTHING: 'everything',
-  FUTURE: 'Future',
-  PRESENT: 'Present',
-  PAST: 'Past',
-};
-
-const TYPES = [
-  'taxi',
-  'bus',
-  'train',
-  'ship',
-  'drive',
-  'flight',
-  'check-in',
-  'sightseeing',
-  'restaurant',
-];
-
-const DEFAULT_TYPE = 'flight';
-
-const BLANK_POINT = {
+const DEFAULT_POINT = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
-  isFavorite: false,
   destination: null,
   offers: [],
-  type: DEFAULT_TYPE,
+  type: 'flight',
+  isFavorite: false,
 };
 
-const MODE = {
-  DEFAULT: 'default',
-  EDITING: 'editing',
+const FILTER_TYPES = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
 };
 
-const SORT_TYPE = {
+const FILTER_NOTIFICATIONS = {
+  [FILTER_TYPES.EVERYTHING]: 'Click New Event to create your first point',
+  [FILTER_TYPES.FUTURE]: 'There are no future events now',
+  [FILTER_TYPES.PRESENT]: 'There are no present events now',
+  [FILTER_TYPES.PAST]: 'There are no past events now',
+};
+
+const SORT_TYPES = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -46,22 +30,51 @@ const SORT_TYPE = {
   OFFERS: 'offers',
 };
 
-const ENABLED_SORT_TYPE = {
-  [SORT_TYPE.DAY]: true,
-  [SORT_TYPE.EVENT]: false,
-  [SORT_TYPE.TIME]: true,
-  [SORT_TYPE.PRICE]: true,
-  [SORT_TYPE.OFFERS]: false,
+const ON_SORT_TYPES = {
+  [SORT_TYPES.DAY]: true,
+  [SORT_TYPES.EVENT]: false,
+  [SORT_TYPES.TIME]: true,
+  [SORT_TYPES.PRICE]: true,
+  [SORT_TYPES.OFFERS]: false,
+};
+
+const MODES = {
+  DEFAULT: 'default',
+  EDITING: 'editing',
+};
+
+const FORM_TYPES = {
+  CREATING: 'CREATING',
+  EDITING: 'EDITING',
+};
+
+const USER_ACTIONS = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UPDATE_TYPES = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
+};
+
+const BLOCKING_TIME = {
+  MIN: 350,
+  MAX: 1000,
 };
 
 export {
-  DESTINATION_COUNT,
-  TYPES,
-  OFFER_COUNT,
-  POINT_COUNT,
-  BLANK_POINT,
+  DEFAULT_POINT,
   FILTER_TYPES,
-  MODE,
-  SORT_TYPE,
-  ENABLED_SORT_TYPE,
+  MODES,
+  SORT_TYPES,
+  ON_SORT_TYPES,
+  USER_ACTIONS,
+  UPDATE_TYPES,
+  FORM_TYPES,
+  BLOCKING_TIME,
+  FILTER_NOTIFICATIONS,
 };

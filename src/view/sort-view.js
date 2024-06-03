@@ -1,23 +1,17 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { createSortTemplate } from '../template/sort-template.js';
-import { SORT_TYPE, ENABLED_SORT_TYPE } from '../const.js';
 
 export default class SortView extends AbstractView {
   #items = null;
-  #onItemChange = null;
+  #handleSortTypeChange = null;
 
-  constructor({ sortType, onItemChange }) {
+  constructor({ items, onItemChange }) {
     super();
 
-    this.#items = Object.values(SORT_TYPE).map((type) => ({
-      type,
-      isChecked: type === sortType,
-      isDisabled: !ENABLED_SORT_TYPE[type],
-    }));
+    this.#items = items;
+    this.#handleSortTypeChange = onItemChange;
 
-    this.#onItemChange = onItemChange;
-
-    this.element.addEventListener('change', this.#itemChangeHandler);
+    this.element.addEventListener('change', this.#sortTypeChangeHandler);
   }
 
   get template() {
@@ -26,8 +20,8 @@ export default class SortView extends AbstractView {
     });
   }
 
-  #itemChangeHandler = (evt) => {
+  #sortTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#onItemChange(evt.target.dataset.sortType);
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }

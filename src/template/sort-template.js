@@ -1,4 +1,4 @@
-function createSortItemsTemplate({ items }) {
+function createSortPartsTemplate({ items }) {
   const sortItems = items
     .map(
       (sortItem) => `<div class="trip-sort__item  trip-sort__item--${sortItem.type}">
@@ -24,8 +24,7 @@ function createSortItemsTemplate({ items }) {
 
 const createSortTemplate = ({
   items,
-}) => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${createSortItemsTemplate(
-  { items }
+}) => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${createSortPartsTemplate({ items }
 )}
       </form>`;
 

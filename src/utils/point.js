@@ -1,16 +1,13 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { TIME_DIVISION } from './const.js';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-function capitalize(string) {
-  return `${string[0].toUpperCase()}${string.slice(1)}`;
-}
-
 function formatStringToDateTime(date) {
-  return dayjs(date).format('YYYY-MM-DDTHH:mm');
+  return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
 function formatStringToShortDate(date) {
@@ -21,36 +18,47 @@ function formatStringToTime(date) {
   return dayjs(date).format('HH:mm');
 }
 
-function getSheduleDate(date) {
-  return dayjs(date).format('DD/MM/YY HH:mm');
+function capitalize(string) {
+  return `${string[0].toUpperCase()}${string.slice(1)}`;
 }
-
-const MSEC_IN_SEC = 1000;
-const SEC_IN_MIN = 60;
-const MIN_IN_HOUR = 60;
-const HOUR_IN_DAY = 24;
-
-const MSEC_IN_HOUR = MIN_IN_HOUR * SEC_IN_MIN * MSEC_IN_SEC;
-const MSEC_IN_DAY = HOUR_IN_DAY * MSEC_IN_HOUR;
 
 function getPointDuration(dateFrom, dateTo) {
   const timeDiff = dayjs(dateTo).diff(dayjs(dateFrom));
+  const totalDays = dayjs.duration(timeDiff).days() + dayjs.duration(timeDiff).years() * 365;
+  const totalHours = dayjs.duration(timeDiff).hours();
+  const totalMinutes = dayjs.duration(timeDiff).minutes();
 
   let pointDuration = 0;
 
   switch (true) {
-    case timeDiff >= MSEC_IN_DAY:
-      pointDuration = dayjs.duration(timeDiff).format('DD[D] HH[H] mm[M]');
+    case timeDiff >= TIME_DIVISION.MSEC_IN_DAY:
+      pointDuration = dayjs
+        .duration({ days: totalDays, hours: totalHours, minutes: totalMinutes })
+        .format('DD[D] HH[H] mm[M]');
       break;
-    case timeDiff >= MSEC_IN_HOUR:
+
+    case timeDiff >= TIME_DIVISION.MSEC_IN_HOUR:
       pointDuration = dayjs.duration(timeDiff).format('HH[H] mm[M]');
       break;
-    case timeDiff < MSEC_IN_HOUR:
+
+    case timeDiff < TIME_DIVISION.MSEC_IN_HOUR:
       pointDuration = dayjs.duration(timeDiff).format('mm[M]');
       break;
   }
 
   return pointDuration;
+}
+
+function futurePointFiltering(point) {
+  return dayjs().isBefore(point.dateFrom);
+}
+
+function presentPointFiltering(point) {
+  return dayjs().isAfter(point.dateFrom) && dayjs().isBefore(point.dateTo);
+}
+
+function pastPointFiltering(point) {
+  return dayjs().isAfter(point.dateTo);
 }
 
 function getPointsDateDifference(pointA, pointB) {
@@ -68,14 +76,26 @@ function getPointsDurationDifference(pointA, pointB) {
   return durationB - durationA;
 }
 
+function majorDifferenceTest(pointA, pointB) {
+  return (
+    pointA.dateFrom !== pointB.dateFrom ||
+    pointA.basePrice !== pointB.basePrice ||
+    getPointDuration(pointA.dateFrom, pointA.dateTo) !==
+      getPointDuration(pointB.dateFrom, pointB.dateTo)
+  );
+}
+
 export {
   formatStringToDateTime,
   formatStringToShortDate,
   formatStringToTime,
   capitalize,
   getPointDuration,
-  getSheduleDate,
   getPointsDateDifference,
   getPointsPriceDifference,
   getPointsDurationDifference,
+  majorDifferenceTest,
+  futurePointFiltering,
+  presentPointFiltering,
+  pastPointFiltering,
 };
