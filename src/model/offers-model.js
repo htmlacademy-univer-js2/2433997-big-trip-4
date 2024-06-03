@@ -1,12 +1,21 @@
-export default class OffersModel {
+import Observable from '../framework/observable.js';
+
+export default class OffersModel extends Observable {
+  #service = null;
   #offers = null;
 
   constructor(service) {
-    this.service = service;
-    this.#offers = this.service.offers;
+    super();
+
+    this.#service = service;
   }
 
-  get offers() {
+  async init() {
+    this.#offers = await this.#service.getOffers();
+    return this.#offers;
+  }
+
+  getOffers() {
     return this.#offers;
   }
 
