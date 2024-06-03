@@ -11,8 +11,8 @@ function getTitleRoute(points = [], destinations = []) {
   return destinationNames.length <= NUMBER_TITLE_ROUTES
     ? destinationNames.join('&nbsp;&mdash;&nbsp;')
     : `${destinationNames.at(0)}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${destinationNames.at(
-        -1
-      )}`;
+      -1
+    )}`;
 }
 
 function getRouteDuration(points = []) {
@@ -20,8 +20,8 @@ function getRouteDuration(points = []) {
 
   return sortedPoints.length > 0
     ? `${dayjs(sortedPoints.at(0).dateFrom).format('DD MMM')}&nbsp;&mdash;&nbsp;${dayjs(
-        sortedPoints.at(-1).dateTo
-      ).format('DD MMM')}`
+      sortedPoints.at(-1).dateTo
+    ).format('DD MMM')}`
     : '';
 }
 
