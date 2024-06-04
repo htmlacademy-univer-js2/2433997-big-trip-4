@@ -2,6 +2,7 @@ import SortView from '../view/sort-view.js';
 import PointListView from '../view/points-list-view.js';
 import NotificationView from '../view/notification-view.js';
 import PreloaderView from '../view/preloader-view.js';
+import ErrorView from '../view/error-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import {
@@ -22,6 +23,7 @@ export default class TripPresenter {
 
   #pointListComponent = new PointListView();
   #sortComponent = null;
+  #errorComponent = new ErrorView();
   #notificationComponent = null;
   #preloaderComponent = null;
 
@@ -43,6 +45,7 @@ export default class TripPresenter {
   #isCreating = false;
   #isPreloading = true;
   #isPreloadingError = false;
+  #isError = false;
 
   constructor({
     tripContainer,
@@ -164,11 +167,11 @@ export default class TripPresenter {
 
     this.#newEventPresenter.enableButton();
 
-    if (this.#isPreloadingError) {
+
+    if (this.#isError) {
+      this.#renderError();
       this.#clearTrip({ resetSortType: true });
-      remove(this.#sortComponent);
-      this.#sortComponent = null;
-      this.#renderPreloading({ isLoading, isLoadingError });
+      this.#newEventPresenter.disableButton();
       return;
     }
 
@@ -180,6 +183,10 @@ export default class TripPresenter {
     this.#renderSort();
     this.#renderPointContainer();
     this.#renderPoints();
+  };
+
+  #renderError = () => {
+    render(this.#errorComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
   #clearTrip = ({ resetSortType = false } = {}) => {
@@ -246,11 +253,12 @@ export default class TripPresenter {
       case UPDATE_TYPES.INIT:
         if (data.isError) {
           this.#isPreloading = false;
-          this.#isPreloadingError = true;
+          this.#isError = true;
           this.#renderTrip();
           break;
         } else {
           this.#isPreloading = false;
+          this.#isError = false;
           remove(this.#preloaderComponent);
           this.#renderTrip();
           break;
